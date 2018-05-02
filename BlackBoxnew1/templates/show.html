@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shows</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li ><a href="{{ url_for('BlackBox')}}">Home</a></li>
+        <li class="active"><a href="{{ url_for('show')}}">Shows</a></li>
+        {% if current_user.get_id()!=None %}
+         <li><a href="{{ url_for('bookinghistory')}}">Booking History</a></li>
+        {% endif %}
+        {% if current_user.admin == 1 %}
+		      <li ><a href="{{ url_for('addmovie')}}">Add more movies</a></li>
+        <li ><a href="{{ url_for('deletemovie')}}">Delete movies</a></li>
+          
+	     {% endif %}
+        <li ><a href="{{ url_for('wallet') }}">Wallet</a></li>
+
+        <li><a href="#">Contact</a></li>
+      </ul>
+      {% if current_user.get_id()==None %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('register')}}" ><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('logintoblackbox')}} "><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+      {% endif %}
+
+      {% if current_user.get_id()!=None %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('logout')}} "><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#" ><span class="glyphicon glyphicon-log-in"></span>  Hello {{current_user.firstname}}</a></li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+	<form method="POST" action="{{ url_for('seats')}}" id="form_seat">
+		<div class="form-group">
+		{% for i in range(0,movie_display.__len__()) %}
+			<div class="row">	
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;{{ movie_display[i] }}</p>
+			</div>
+			{% for j in range(0,date_list[i].__len__()) %}
+				<div class="row">	
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ date_list[i][j] }}	</p>
+				</div>
+				<div class="row">
+				<div class="col-md-1"></div>	
+				{% for k in range(0,timing_list[i][j].__len__()) %}
+
+					<div class="col-md-3">
+						<label class="btn btn-primary">{{ timing_list[i][j][k] }}
+							<button  name="show_time" type="submit" value="{{ i*10000 + j*100 + k }}" class="hidden" autocomplete="off"></button>
+						</label>
+					</div>
+				{% endfor %}
+				</div>
+			{% endfor %}
+		{% endfor %}
+	</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Seats</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/layout.css') }}">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script src="/static/js/layout.js" type="text/javascript"></script>
+   <style>
+   table {
+    border-collapse: collapse;
+ }
+
+ table, td, th {
+    border: 1px solid black;
+ }
+</style>
+</head>
+<body>
+   <nav class="navbar navbar-inverse">
+     <div class="container-fluid">
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#">Logo</a>
+     </div>
+     <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li ><a href="{{ url_for('BlackBox')}}">Home</a></li>
+        <li ><a href="{{ url_for('show')}}">Shows</a></li>
+        {% if current_user.get_id()!=None %}
+         <li class="active"><a href="{{ url_for('bookinghistory')}}">Booking History</a></li>
+        {% endif %}
+        {% if current_user.admin == 1 %}
+        <li ><a href="{{ url_for('addmovie')}}">Add more movies</a></li>
+          <li ><a href="{{ url_for('deletemovie')}}">Delete movies</a></li>
+        
+        {% endif %}
+        <li ><a href="{{ url_for('wallet') }}">Wallet</a></li>
+
+        <li><a href="#">Contact</a></li>
+     </ul>
+     {% if current_user.get_id()==None %}
+     <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('register')}}" ><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+     </ul>
+     <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('logintoblackbox')}} "><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+     </ul>
+     {% endif %}
+
+     {% if current_user.get_id()!=None %}
+     <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('logout')}} "><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+     </ul>
+     <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#" ><span class="glyphicon glyphicon-log-in"></span>  Hello {{current_user.firstname}}</a></li>
+     </ul>
+     {% endif %}
+  </div>
+</div>
+</nav>
+<div class="container">
+  <table class="table table-bordered">
+   <tr>
+      <th>Transaction Id</th>
+      <th>Name</th>
+      <th>Movie Date</th>
+      <th>Movie Time</th>
+      <th>Number of Seats</th>
+      <th>Seat Number</th>
+      <th>Booking Date</th>
+      <th>Booking Time</th>
+      <th>Transaction Amount</th>
+      <th>Status</th>
+      <th>Cancel</th>
+   </tr>
+</thead>
+<tbody>
+   {% for i in range(0,show.__len__()) %}
+   <tr>
+      <td>{{ show[i].id }}</td>
+      <td>{{ show[i].movie_name }}</td>
+      <td>{{ show[i].movie_date }}</td>
+      <td>{{ show[i].movie_timing }}</td>
+      <td>{{ show[i].no_seats }}</td>
+      <td>{{ show[i].seat_number }}</td>
+      <td>{{ show[i].booking_date }}</td>
+      <td>{{ show[i].booking_time }}</td>
+      <td>{{ show[i].net_cost }}</td>
+      <td>{{ status[i] }}</td>
+      {% if status[i]=='UPCOMING' %}
+        <td><form method="POST"><button style="color:blue;width: 30px;height: 30px;" type="submit" name="refund" id="{{ show[i].id }}" value="{{ show[i].id }}" ></button></form></td>
+      {% endif %}
+      {% if status[i]!='UPCOMING' %}
+        <td><form method="POST"><button style="color:blue;width: 30px;height: 30px;" type="submit" name="refund" id="{{ show[i].id }}" value="{{ show[i].id }}" disabled="true"></button></form></td>
+      {% endif %}
+   </tr>
+   {% endfor %}
+</tbody>
+</table>
+</div>
+</body>
+</html>

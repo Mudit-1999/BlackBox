@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Interface</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li ><a href="{{ url_for('BlackBox')}}">Home</a></li>
+        <li ><a href="{{ url_for('show')}}">Shows</a></li>
+        {% if current_user.get_id()!=None %}
+         <li><a href="{{ url_for('bookinghistory')}}">Booking History</a></li>
+        {% endif %}
+        {% if current_user.admin == 1 %}
+        <li ><a  class="active" href="{{ url_for('addmovie')}}">Add more movies</a></li>
+        <li ><a href="{{ url_for('deletemovie')}}">Delete movies</a></li>
+       {% endif %}
+        <li ><a href="#">Wallet</a></li>
+
+        <li ><a href="#">Contact</a></li>
+      </ul>
+      {% if current_user.get_id()==None %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('register')}}" ><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('logintoblackbox')}} "><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+      {% endif %}
+
+      {% if current_user.get_id()!=None %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('logout')}} "><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#" ><span class="glyphicon glyphicon-log-in"></span>  Hello Admin Mr.{{current_user.firstname}}</a></li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Add Movies</h2>
+  <form method='post'>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="Nmae">Name</label>
+      <input type="text" class="form-control" id="movie_name" name="movie_name" placeholder="Movie Name" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="Number of seats">Number of Seats</label>
+      <input type="number" class="form-control" id="no_seats" name="no_seats" placeholder="Number of Seats" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="Date">Date</label>
+      <input type="date" class="form-control" id="movie_date" name="movie_date" required>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="Price">Price</label>
+      <input type="number" class="form-control" id="movie_price" name="movie_price" required>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="Timing">Timing</label>
+      <input type="time" class="form-control" id="movie_time" name="movie_time" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </div>
+
+</form>
+</div>
+</body>
+</html>
